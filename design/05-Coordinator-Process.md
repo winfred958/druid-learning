@@ -1,4 +1,4 @@
-# Coordinator Process
+# [Coordinator Process](https://druid.apache.org/docs/latest/design/coordinator.html)
 
 ## [Overview](https://druid.apache.org/docs/latest/design/coordinator.html#overview)
  - Coordinator 进程主要负责 segment 的管理和分配. 具体的说, Coordinator进程与Historical进程通信, 根据配置load/drop segment.
@@ -12,12 +12,12 @@
     - 在一些未指派historical 进程的segments, Historical 首先会根据 tier 的容量排序, 容量小的historical有最高优先级.
     - 未指派的segment总是分配给容量最小的historical进程, 以保持进程(节点)之间的平衡.
     - Coordinator 不直接与historical进程通信 在分配新segment时候.
-        - coordinator创建一些关于new segment的临时信息在historical 进程将要加载的的队列路径.
-        - 一旦遇到请求, historical进程将load segments
+        - coordinator创建一些关于new segment的临时信息在historical 进程将要加载的的队列路径.一旦遇到请求, historical进程将load segments
         
 ## [Cleaning up segments](https://druid.apache.org/docs/latest/design/coordinator.html#cleaning-up-segments)
 Coordinator 会周期性的运行, 比较数据库中记录的used segment和historical节点的segment进行比较, Coordinator发送请求至historical节点, unload 没有使用的segment 或 segments信息已经从元数据库中移除的segments.
 Segments 被 overshadowed(segments version ard too old and their data has been replaced by newer segments) 将被标记为 unused, 在Coordinator下一个周期被 historical unload.
+
 ## [Segment availability](https://druid.apache.org/docs/latest/design/coordinator.html#segment-availability)
  1. 如果 a historical process restart 或 由于其他一些原因 becomes unavailable, Coordinator 将会notice 到这个historical进程已经 missing, 把这个historical节点的segments标记为 dropped.
  2. 
