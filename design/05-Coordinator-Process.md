@@ -23,7 +23,7 @@ Segments 被 overshadowed(segments version ard too old and their data has been r
 
 ## [Balancing segment load](https://druid.apache.org/docs/latest/design/coordinator.html#balancing-segment-load)
  1. 为了确保 segments 在 historical节点均匀的分配, coordinator进程 会周期的检查每个historical总的segments大小.
- 2. 对于集群中的每一个 historical, coordinator将确认利用率最高的historical和利用率最低的historical.
+ 2. 对于集群中的每一个 historical tier, coordinator 进程将确认historical利用率最高(highest utilization)的和historical利用率最低(lowest utilization)的.
  3. high low 利用率之间的差异如果超过某个阈值, 则将 a number of segments 从利用率最高的historical移动到利用率最低的historical.
  4. 每个周期, 从一个historical移动到另一个historical的segments数量上有配置限制.
  5. 被移动的segments是随机选择的, 并且仅在结果利用率计算表明最高和最低服务器之间的百分比差异减小时才移动。
