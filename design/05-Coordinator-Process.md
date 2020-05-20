@@ -1,6 +1,6 @@
 # Coordinator Process
 
-##[Overview](https://druid.apache.org/docs/latest/design/coordinator.html#overview)
+## [Overview](https://druid.apache.org/docs/latest/design/coordinator.html#overview)
  - Coordinator 进程主要负责 segment 的管理和分配. 具体的说, Coordinator进程与Historical进程通信, 根据配置load/drop segment.
      - Coordinator 负责 load new segment, drop outdated segment
      - 确保 segment 的 replica数正确.
