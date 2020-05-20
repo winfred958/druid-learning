@@ -19,7 +19,8 @@
 Coordinator 会周期性的运行, 比较数据库中记录的used segment和historical节点的segment进行比较, Coordinator发送请求至historical节点, unload 没有使用的segment 或 segments信息已经从元数据库中移除的segments.
 Segments 被 overshadowed(segments version ard too old and their data has been replaced by newer segments) 将被标记为 unused, 在Coordinator下一个周期被 historical unload.
 ## [Segment availability](https://druid.apache.org/docs/latest/design/coordinator.html#segment-availability)
-如果 a historical process restart 或 由于其他一些原因 becomes unavailable, Coordinator 将会注意到这个historical进程, 把这个historical节点的segments标记为 dropped.
+ 1. 如果 a historical process restart 或 由于其他一些原因 becomes unavailable, Coordinator 将会notice 到这个historical进程已经 missing, 把这个historical节点的segments标记为 dropped.
+ 2. 
 
 ## [Balancing segment load](https://druid.apache.org/docs/latest/design/coordinator.html#balancing-segment-load)
  1. 为了确保 segments 在 historical节点均匀的分配, coordinator进程 会周期的检查每个historical总的segments大小.
