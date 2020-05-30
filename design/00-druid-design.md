@@ -26,7 +26,7 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
 
 # Deep storage
  - Druid 使用 deep storage 存储ingested数据, deep storage 可以是hdfs, s3 等分布式文件系统.
- - Druid 使用 deep storage **仅作为后台进程间(historical)的数据传输**.
+ - Druid 使用 deep storage **仅作为数据的备份, 用来在后台进程间(historical)数据传输的方式**.
  - To respond to queries(响应查询), **historical 不能read from deep storage,而是从historical本地磁盘获取segment**. 这意味着Druid 查询时不需要访问 deep storage. 也意味着在deep storage和historical之间, 必须有足够的磁盘空间(local disk),用来 load 指定时间段的segment.
  - Deep storage 是druid 弹性, 容错的重要的组成部分. Druid 能 bootstrap from deep storage 在个别 historical 丢失状态时.
  - 详细, 请看[Deep Storage](https://druid.apache.org/docs/latest/dependencies/deep-storage.html)
