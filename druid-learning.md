@@ -1,13 +1,13 @@
 #目录
+ - 理论篇
+    - [Druid 的架构设计](./design/00-druid-design.md)
  - 使用篇
     - [Druid 使用场景](./tutorials/01-usage-scenario.md)
-    - [组件介绍]()
     - [集群配置配置篇]()
     - [使用导读](tutorials/04-use-tutorials.md)
     - Data Ingestion
     - Data Query
  - 进阶篇
-    - druid 的架构设计
-    - 
+    - 资源选择和配置实践
  - Q&A
     - [druid 时区问题](./Q&A/00.time-zone.md)
