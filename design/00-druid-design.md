@@ -7,11 +7,11 @@
 # Process and Servers
 
 Druid 有几种进程类型, 如下:
- - [Coordinator](./05-Coordinator-Process.md)
+ - [Coordinator](./05-coordinator.md)
  - Overload
  - Broker
  - Router
- - [Historical](./06-Historical-Process.md)
+ - [Historical](./06-historical.md)
  - MiddleManager 
  
 Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三种Server Type: 
@@ -58,4 +58,6 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
     - Indexing is the mechanism by which new segments are created, and handoff is the mechanism by which they are published and begin being served by Historical processes.
     - indexing是创建新segment的机制，而handoff是publish new segment 并开始由Historical进程提供服务的机制。
         1. Indexing task start running and building a new segment.
+    - Coordinator/Historical 方面:
+        1. Coordinator polls the metadata store periodically(周期性的, 默认1minute) for newly published segment.
  - ## [Segment identifiers](https://druid.apache.org/docs/latest/design/architecture.html#segment-identifiers)
