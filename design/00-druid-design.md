@@ -4,7 +4,7 @@
    每一个Druid进程都能独立的配置和独立伸缩, 给你最大的自由度.
    这样的设计同样增强了容错能力: 一个组件失效不会直接影响其他组件.
    ```
-# Process and Servers
+# [Process and Servers](https://druid.apache.org/docs/latest/design/architecture.html#processes-and-servers)
 
 Druid 有几种进程类型, 如下:
  - [Coordinator](./05-coordinator.md)
@@ -57,7 +57,47 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
  - ## [Indexing and handoff](https://druid.apache.org/docs/latest/design/architecture.html#indexing-and-handoff)
     - Indexing is the mechanism by which new segments are created, and handoff is the mechanism by which they are published and begin being served by Historical processes.
     - indexing是创建新segment的机制，而handoff是publish new segment 并开始由Historical进程提供服务的机制。
-        1. Indexing task start running and building a new segment.
+        1. Indexing task start running and building a new segment. 必须确定segment的identifier在开始构建之前.对于一个appending task(例如kafka task, 或append模式下的index task)将会调用 "allocate" API在Overload上, 以便潜在的将new partition 添加到现有的segment.
+        2. 如果 indexing task 是 realtime task那么segment此刻能立即被查询, 这个segment available, but unpublished.
+        3. 当indexing task finished, 它会push segment to deep storage and publishes it 通过写record在metadata store.
+        4. 如果 indexing task 是 realtime task, 此刻它将等待Historical进程 load the segment. 如果indexing task 不是realtime task就直接退出. 
     - Coordinator/Historical 方面:
-        1. Coordinator polls the metadata store periodically(周期性的, 默认1minute) for newly published segment.
+        1. Coordinator polls the metadata store periodically(周期性的, 默认1minute) for newly published segment. Coordinator定期轮询 metadata store 获取 published segment.
+        2. 当Coordinator finds a segment is published ,but unabailable,it chooses a Historical进程去load 这个segment并且指示Historical load.
+        3. Historical load the segment and begins serving it.
+        4. 此刻, 如果 the indexing task was waiting for handoff, it will exit. 
  - ## [Segment identifiers](https://druid.apache.org/docs/latest/design/architecture.html#segment-identifiers)
+    - Segment 有4段标识符, 如下:
+        - Datasource name
+        - Time interval
+            - segment 包含的 time chunk. 对应 specified 在 ingestion 时设置的 **segmentGranularity**.  
+        - Version number
+            - 通常是 ISO8601 时间戳对应segment首次开始时间.
+        - Partition number
+            - integer, 在 datasource+interval+version下唯一,不一定连续.
+    - ```text
+      ${datasourceName}_${timeInterval}_${versionNumber}_${partitionNumber}
+      例如:
+      clarity-cloud0_2018-05-21T16:00:00.000Z_2018-05-21T17:00:00.000Z_2018-05-21T15:56:09.909Z    
+      clarity-cloud0_2018-05-21T16:00:00.000Z_2018-05-21T17:00:00.000Z_2018-05-21T15:56:09.909Z_1
+      ```
+ - ## [Segment versioning](https://druid.apache.org/docs/latest/design/architecture.html#segment-versioning)
+ - ## [Segment lifecycle](https://druid.apache.org/docs/latest/design/architecture.html#segment-lifecycle)
+    - Each segment 都有生命周期, 包括以下三个主要领域:
+        1. Metadata store
+            - Segment metadata (a small JSON payload a few KB) is stored in the metadata store 当segment is done being constructed.
+            - inserting a record of  segment into the metadata store is called publishing.
+            - 这个 metadata recodes have a boolean flag named used, 用户控制segment是否可查询.
+            - realtime task 创建的segment在publish之前可用.
+        2. Deep storage
+            - a segment is done being constructed 将会 pushed to deep storage, 这发生在metadata to the metadata store 之前. 
+        3. Availability for querying
+            - segment 被用于对外提供查询, realtime task 或者Historical进程.
+    - 可以通过Druid SQL查询 sys.segments 表 inspect the state of currently active segments, 这个表济洛路了如下信息:
+        - is_published
+        - is_available
+        - is_realtime
+        - is_overshadowed
+# [Query processing](https://druid.apache.org/docs/latest/design/architecture.html#query-processing)
+ - 查询请求首先到达 broker,broker 将确认哪些segment可能属于该查询. segment list 总是 pruned by time. 
+ 有时也 pruned by other attributes 
