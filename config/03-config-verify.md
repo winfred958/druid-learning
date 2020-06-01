@@ -2,7 +2,7 @@
 
 ## DirectMemory Verify
  - verifyDirectMemory: Druid  进程启动时
-    - maxDirectMemory = druid.processing.buffer.sizeBytes * (druid.processing.numMergeBuffers + druid.processing.numThreads +1)
+    - MaxDirectMemory least = druid.processing.buffer.sizeBytes * (druid.processing.numMergeBuffers + druid.processing.numThreads +1)
         -  ```text
            "Not enough direct memory. Please adjust 
                -XX:MaxDirectMemorySize,
@@ -18,3 +18,14 @@
           (druid.processing.numMergeBuffers[%,d] + druid.processing.numThreads[%,d] + 1)\", 
           or else set -XX:MaxDirectMemorySize to at least 25% of maximum jvm heap size.",
           ```
+## DirectMemory About 
+ - druid.processing.buffer.sizeBytes
+    - (auto max 1G)
+        - historical: ~500M
+        - broker: ~500M
+        - middleManager: ~100M
+ - druid.processing.numThreads
+    - [1, number of core -1]
+ - druid.processing.numMergeBuffers
+    - max(2, druid.processing.numThreads / 4)
+ - MaxDirectMemory >= druid.processing.buffer.sizeBytes * (druid.processing.numMergeBuffers + druid.processing.numThreads +1)
