@@ -28,12 +28,14 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
  - Druid 使用 deep storage 存储ingested数据, deep storage 可以是hdfs, s3 等分布式文件系统.
  - Druid 使用 deep storage **仅作为数据的备份, 用来在后台进程间(historical)数据传输的方式**.
  - To respond to queries(响应查询), **historical 不能read from deep storage,而是从historical本地磁盘获取segment**. 这意味着Druid 查询时不需要访问 deep storage. 也意味着在deep storage和historical之间, 必须有足够的磁盘空间(local disk),用来 load 指定时间段的segment.
- - Deep storage 是druid 弹性, 容错的重要的组成部分. Druid 能 bootstrap from deep storage 在个别 historical 丢失状态时.
+ - Deep storage 是druid 弹性, 容错的重要的组成部分. Druid 能在个别 historical 丢失状态时 bootstrap from deep storage.
  - 详细, 请看[Deep Storage](https://druid.apache.org/docs/latest/dependencies/deep-storage.html)
 # Metadata storage
  - RDBMS
+    - PostgreSQL
+    - MySQL
 # Zookeeper
- - internal service discovery, coordination and leader election.
+ - Used for internal service discovery, coordination and leader election.
 # Architecture diagram
  - ![avatar](./imges/architecture-diagram.png)
 # Storage design
@@ -105,8 +107,8 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
  有时也 pruned by other attributes.
  - broker 会确认query segment 存在哪些 historical 和 middleManager 然后发送重写的子查询到想用节点, historical和middleManager进程将会处理子query, 返回结果给broker, broker收到results后merge多个节点返回的结果返回给调用者.
  - broker pruning是druid限制每次查询必须扫描数据的一个重要的方法, 但不是唯一方法, 对于broker pruning 更细粒度的 filter, 
- 每个segment的缩影结构允许druid在查看任何数据之前确定哪些行匹配 filter.
- 一旦druid知道哪些字段匹配一个特定的查询, 就会脂肪为查询所需的特定列.
+ 每个segment的索引结构允许druid在查看任何数据之前确定哪些行匹配 filter.
+ 一旦druid知道哪些字段匹配一个特定的查询, 就会只访问查询所需的特定列.
  - So druid用了三个不同的技术最大化查询效率:
     - Pruning which segments are accessed for each query.
     - Within each segment, using indexes to identify which rows must be accessed.
