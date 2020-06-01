@@ -1,7 +1,7 @@
 # Config Verify
 
 ## DirectMemory Verify
- - verifyDirectMemory
+ - verifyDirectMemory: Druid  进程启动时
     - maxDirectMemory = druid.processing.buffer.sizeBytes * (druid.processing.numMergeBuffers + druid.processing.numThreads +1)
         -  ```text
            "Not enough direct memory. Please adjust 
