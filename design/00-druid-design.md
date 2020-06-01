@@ -7,12 +7,12 @@
 # [Process and Servers](https://druid.apache.org/docs/latest/design/architecture.html#processes-and-servers)
 
 Druid 有几种进程类型, 如下:
- - [Coordinator](./05-coordinator.md)
  - Overload
+ - [MiddleManager](./04-middleManager.md)
+ - [Coordinator](./05-coordinator.md)
+ - [Historical](./06-historical.md) 
  - Broker
  - Router
- - [Historical](./06-historical.md)
- - MiddleManager 
  
 Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三种Server Type: 
  - Master
@@ -24,7 +24,7 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
 
 # External dependencies
 
-# Deep storage
+# [Deep storage](https://druid.apache.org/docs/latest/design/architecture.html#deep-storage)
  - Druid 使用 deep storage 存储ingested数据, deep storage 可以是hdfs, s3 等分布式文件系统.
  - Druid 使用 deep storage **仅作为数据的备份, 用来在后台进程间(historical)数据传输的方式**.
  - To respond to queries(响应查询), **historical 不能read from deep storage,而是从historical本地磁盘获取segment**. 这意味着Druid 查询时不需要访问 deep storage. 也意味着在deep storage和historical之间, 必须有足够的磁盘空间(local disk),用来 load 指定时间段的segment.
@@ -82,6 +82,8 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
       clarity-cloud0_2018-05-21T16:00:00.000Z_2018-05-21T17:00:00.000Z_2018-05-21T15:56:09.909Z_1
       ```
  - ## [Segment versioning](https://druid.apache.org/docs/latest/design/architecture.html#segment-versioning)
+    - segment file 首次创建时间
+    - 支持批处理模式覆盖, 
  - ## [Segment lifecycle](https://druid.apache.org/docs/latest/design/architecture.html#segment-lifecycle)
     - Each segment 都有生命周期, 包括以下三个主要领域:
         1. Metadata store
@@ -100,4 +102,13 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
         - is_overshadowed
 # [Query processing](https://druid.apache.org/docs/latest/design/architecture.html#query-processing)
  - 查询请求首先到达 broker,broker 将确认哪些segment可能属于该查询. segment list 总是 pruned by time. 
- 有时也 pruned by other attributes 
+ 有时也 pruned by other attributes.
+ - broker 会确认query segment 存在哪些 historical 和 middleManager 然后发送重写的子查询到想用节点, historical和middleManager进程将会处理子query, 返回结果给broker, broker收到results后merge多个节点返回的结果返回给调用者.
+ - broker pruning是druid限制每次查询必须扫描数据的一个重要的方法, 但不是唯一方法, 对于broker pruning 更细粒度的 filter, 
+ 每个segment的缩影结构允许druid在查看任何数据之前确定哪些行匹配 filter.
+ 一旦druid知道哪些字段匹配一个特定的查询, 就会脂肪为查询所需的特定列.
+ - So druid用了三个不同的技术最大化查询效率:
+    - Pruning which segments are accessed for each query.
+    - Within each segment, using indexes to identify which rows must be accessed.
+    - Within each segment, only reading the specific rows and columns that are relevant to a particular query.
+ - 更多查询相关请看: [Query execution](https://druid.apache.org/docs/latest/querying/query-execution.html)
