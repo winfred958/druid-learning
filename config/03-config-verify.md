@@ -28,4 +28,7 @@
     - [1, number of core -1]
  - druid.processing.numMergeBuffers
     - max(2, druid.processing.numThreads / 4)
- - MaxDirectMemory >= druid.processing.buffer.sizeBytes * (druid.processing.numMergeBuffers + druid.processing.numThreads +1)
+ - JVM MaxDirectMemory
+    - least = druid.processing.buffer.sizeBytes * (druid.processing.numMergeBuffers + druid.processing.numThreads +1)
+ - druid.server.http.numThreads
+    - max(10, (Number of cores * 17) / 16 + 2) + 30
