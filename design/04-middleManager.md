@@ -5,7 +5,7 @@
 ## HTTP endpoints
  - For a list of API endpoints supported by the MiddleManager, please see the [API reference](https://druid.apache.org/docs/latest/operations/api-reference.html#middlemanager).
 ## Overview
- - MiddleManager 进程是一个管理已经提交task的worker process.
+ - MiddleManager 进程是执行已经提交task的worker process.
  - MiddleManager 负责创建 Peon, 分配task给单个的JVM进程Peon, 这样做的原因是为了资源和日志的隔离.
  - Each [Peon](https://druid.apache.org/docs/latest/design/peons.html) 一次只能运行一个task, a middleManager 有多个 Peons.
 ## Running

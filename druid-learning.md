@@ -2,6 +2,7 @@
  - 理论篇
     - [Druid 的架构设计](./design/00-druid-design.md)
  - 使用篇
+    - [硬件选型](./config/02-select-hardware.md)
     - [Druid 使用场景](./tutorials/01-usage-scenario.md)
     - [集群配置配置篇]()
     - [使用导读](tutorials/04-use-tutorials.md)
