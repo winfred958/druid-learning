@@ -7,7 +7,7 @@
 # [Process and Servers](https://druid.apache.org/docs/latest/design/architecture.html#processes-and-servers)
 
 Druid 有几种进程类型, 如下:
- - Overload
+ - [Overload](./03-overload.md)
  - [MiddleManager](./04-middleManager.md)
  - [Coordinator](./05-coordinator.md)
  - [Historical](./06-historical.md) 
@@ -114,3 +114,8 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
     - Within each segment, using indexes to identify which rows must be accessed.
     - Within each segment, only reading the specific rows and columns that are relevant to a particular query.
  - 更多查询相关请看: [Query execution](https://druid.apache.org/docs/latest/querying/query-execution.html)
+
+
+# 参考资料
+- [druid的基础架构与应用](https://mp.weixin.qq.com/s/a5F48l9XYi09zeVtL2xXeQ)
+- [Apache Druid 的集群设计与工作流程](https://mp.weixin.qq.com/s/wPDdXU3dIvt-yZ-u5AmC9g)
