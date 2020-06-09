@@ -15,7 +15,7 @@
         - CPU 16 vCPUs +
         - RAM 128G ~ 256G
         - SSD 1.2T ~ 2*1.9T 
-            - 磁盘不易过大, 会造成segment加载缓慢
+            - **磁盘不易过大, 过大会造成historical加载segment过多, 影响加载和查询效率**
 - query server, 查询下发, merger结果,内存cache, 主要考虑CPU RAM (标准型 or 高IO型)
     - 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
         - CPU 8 vCPUs +
