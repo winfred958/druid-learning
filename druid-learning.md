@@ -6,7 +6,7 @@
     - [硬件选型](./config/02-select-hardware.md)
     - [使用导读](tutorials/04-use-tutorials.md)
     - [集群配置篇](./tutorials/03-cluster-config.md)
-    - [配置注意事项](./config/03-config-verify.md)
+    - [配置注意事项](./config/03-config-verify&tuning.md)
     - Data Ingestion
     - Data Query
  - 进阶篇

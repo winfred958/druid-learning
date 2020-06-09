@@ -1,4 +1,4 @@
-#
+# [Select Hardware](https://druid.apache.org/docs/latest/tutorials/cluster.html#select-hardware)
 ## Overview
 - overload coordinator 节点对计算资源要求较小.
 - historical, middleManager, broker 节点比较吃资源.
@@ -6,13 +6,53 @@
     - historical 主要吃内存和磁盘.
 - broker 数量主要用于查询的并行度.
 ## 硬件选择
-- master server, 主要考虑CPU RAM (标准型) 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
-    - CPU 8 vCPUs
-    - RAM 31 GB RAM
-- data server, 主要考虑CPU RAM SSD (内存型 SSD) 例如: [AWS i3.4xlarge](https://aws.amazon.com/ec2/instance-types/i3/)
-    - CPU 16 vCPUs +
-    - RAM 128G ~ 256G
-    - SSD 1.2T ~ 2*1.9T 
-- query server, 主要考虑CPU RAM (标准型) 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
-    - CPU 8 vCPUs
-    - RAM 31 GB RAM
+- master server, 负责元数据和zk等task协调, 主要考虑CPU RAM (标准型)
+    - 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
+        - CPU 8 vCPUs
+        - RAM 31 GB RAM
+- data server, 数据index, cache, 子查询处理, IO要求高, 主要考虑CPU RAM SSD (高IO型 + 高内存 + SSD)
+    - 例如:  [AWS i3.4xlarge](https://aws.amazon.com/ec2/instance-types/i3/)
+        - CPU 16 vCPUs +
+        - RAM 128G ~ 256G
+        - SSD 1.2T ~ 2*1.9T 
+            - 磁盘不易过大, 会造成segment加载缓慢
+- query server, 查询下发, merger结果,内存cache, 主要考虑CPU RAM (标准型 or 高IO型)
+    - 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
+        - CPU 8 vCPUs +
+        - RAM 31 GB RAM +
+## [System configuration](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#system-configuration)
+- ### SSD
+    - 推荐SSD用于 Historical, MiddleManager, Indexer process, ssd可以极大地减少在内存中分页数据所需的时间.
+- ### JBOD vs RAID
+    - Historical进程需要从磁盘不同路径加载大量segment
+    - RAID 有性能损耗, 使用JBOD格式可以提高吞吐
+- ### Swap space
+    - 建议 关闭swap
+    - swapoff -a (临时)
+    - swap永久关闭
+        - vim /etc/fstab #注释swap行
+- ### Linux limits
+    - 调整linux参数, 整个系统全局打开文件数(大量网络连接或大量内存映射的文件)
+    - 查看: 
+        - cat /proc/sys/fs/file-max
+        - sysctl -a | grep file-max
+    - 修改: /etc/sysctl.conf 或 (建议)/etc/sysctl.d/fs.conf
+        - fs.file-max = 6553600
+    -  刷新: 
+        - systctl -p
+- ### ulimit
+    - 单个进程打开文件句柄的限制参数
+    - 查看
+        - ulimit -a
+    - 修改
+        - vim /etc/security/limits.conf
+- ### max_map_count
+    - 进程可以拥有的VMA(虚拟内存)的数量.
+    - 查看:
+        - cat /proc/sys/vm/max_map_count 
+        - sysctl -a | grep vm.max_map_count
+    - 修改: /etc/sysctl.conf 或 /etc/sysctl.d/vm.conf
+        - vm.max_map_count = 65530
+    -  刷新: 
+        - systctl -p
+    

@@ -12,5 +12,5 @@
         | druid.indexer.fork.property.druid.processing.buffer.sizeBytes | 100000000 | buffer size |
         | druid.indexer.fork.property.druid.processing.numThreads | 1 | peon进程的线程数 |
 - ### 2. historical
-    - 
+    - vim ${DRUID_HOME}/conf/druid/cluster/data/historical/runtime.properties 
 ## 3. query node
