@@ -10,7 +10,7 @@
     - 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
         - CPU 8 vCPUs
         - RAM 31 GB RAM
-- data server, 数据index, cache, 子查询处理, IO要求高, 主要考虑CPU RAM SSD (高IO型 + 高内存 + SSD)
+- data server, 数据index, cache (memory-mapping), 子查询处理, IO要求高, 主要考虑CPU RAM SSD (高IO型 + 高内存 + SSD)
     - 例如:  [AWS i3.4xlarge](https://aws.amazon.com/ec2/instance-types/i3/)
         - CPU 16 vCPUs +
         - RAM 128G ~ 256G
