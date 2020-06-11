@@ -34,7 +34,7 @@
     - max(10, (Number of cores * 17) / 16 + 2) + 30
     
 ## 基本优化 [Basic cluster tuning](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html)
-- ### [historical](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#historical)
+- ### [Historical](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#historical)
     - #### Heap size
         - 一般经验调整 historical heap size = 0.5G * number of CPU cores, 上限~24G.
             - 注意: 这个不是确定historical heap size 的硬性指标
@@ -86,3 +86,64 @@
     - #### Segment sizes matter
         - **确保segment size 在 300M~700M**, 以便获得最佳性能
         - [segment size optimization](https://druid.apache.org/docs/latest/operations/segment-optimization.html)
+- ### [Broker](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#broker)
+    - #### Heap size
+        - heap 在 Broker的作用:
+            - 部分未merge的来自Historical查询结果
+            - The segment timeline: 包含当前所有 available segment的位置信息 --- 哪个Historical serving 哪些segment.
+            - Cached segment metadata: 包含每个segment的metadata.
+        - Broker heap 需要根据segment数量伸缩
+            - heap size根据数据大小和使用模式决定, 如果集群servers 小于15, 那么 4G~8G是一个很好的开始
+            - servers ~100, 将需要Broker heaps of 30G~60G
+        - **Broker cache enable, cache 将会被存储在heap中, 大小取决于 druid.cache.sizeInBytes**
+    - #### Direct memory size
+        - On the Broker, direct memory 取决于多少merge buffers(用来merge GroupBy), Broker 通常不需要处理线程或缓冲区, 因为查询结果在heap合并到 http线程中.
+            - druid.processing.buffer.sizeBytes
+                - can be set to 500MB
+            - druid.processing.numThreads
+                -  set this to 1 (the minimum allowed)
+            - druid.processing.numMergeBuffers
+                - set this to the same value as on Historicals or a bit higher. >= historical的numMergeBuffers
+    - #### Connection pool sizing
+        - [General Connection Pool Guidelines](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#connection-pool)
+        - On the Broker, 确保 druid.broker.http.numConnections 总和估值要低于 Historical 的 druid.server.http.numThreads
+        - 优化集群让每个Historical can accept 50 个 queries 和 10 个非查询, 并相应的调整代理参数, 这是一个合理的起点.
+    - #### Broker backpressure
+        - xx
+    - #### Number of brokers
+        - 1:15 的broker与historical比例, 是个合理的点
+        - 如果需要broker HA, 至少2个broker
+    - #### Total memory usage
+        - 评估总的 memory 可以用以下指导方针:
+            - Heap: allocated heap size
+            - Direct Memory: (druid.processing.numThreads + druid.processing.numMergeBuffers + 1) * druid.processing.buffer.sizeBytes
+- ### [MiddleManager](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#middlemanager) 
+    - MiddleManager 是一个轻量进程, 控制和管理 启动的 ingestion task
+    - #### MiddleManager heap sizing
+        - MiddleManager 本身不需要太多资源, 通常设置 ~128M
+    - #### SSD storage
+        - MiddleManager 推荐使用SSD, MiddleManager launch task handle segment 存储在磁盘上, 对磁盘IO有要求.
+    - #### Task Count
+        - MiddleManager **最大 launch 的task数由 druid.worker.capacity 控制**.
+        - worker 进程数量取决于集群需要启动多少个并发task, 单个MiddleManager能启动的task数取决于系统资源大小.
+        - 可以申请更多MiddleManager节点提高集群task容量.
+    - #### Task configuration
+        - ingestion task 配置, task 需要执行 query和 ingestion, 因此需要比MiddleManager更多的资源.
+        - ##### Task heap sizing
+            - 1G heap 通常足够了
+        - ##### Lookups
+            - 如果使用lookups,
+        - ##### Task processing threads and buffers
+            - task 进程比historical保存更少的数据,所以 1 ~ 2 个线程就够了
+                - druid.indexer.fork.property.druid.processing.numThreads: 1~2
+                - druid.indexer.fork.property.druid.processing.numMergeBuffers: 2
+                - druid.indexer.fork.property.druid.processing.buffer.sizeBytes: 100M
+        - ##### Direct memory sizing
+            - 上面描述的 processing buffer 和 merge buffer 都是direct memory buffers.
+            - 当处理查询任务时, 必须打开 segment 进行读取, 也需要一些 direct memory,在[segment decompression buffers](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#segment-decompression) 有描述.
+            - ingestion task 也需要 merge 部分 ingestion results, 需要 direct memory 空间. [segment merging.](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#segment-merging) 
+            - 计算direct memory公式: (druid.processing.numThreads + druid.processing.numMergeBuffers + 1) * druid.processing.buffer.sizeBytes
+        - ##### Connection pool sizing
+    - #### Total memory usage
+    
+        
