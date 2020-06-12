@@ -109,7 +109,7 @@
         - On the Broker, 确保 druid.broker.http.numConnections 总和估值要低于 Historical 的 druid.server.http.numThreads
         - 优化集群让每个Historical can accept 50 个 queries 和 10 个非查询, 并相应的调整代理参数, 这是一个合理的起点.
     - #### Broker backpressure
-        - xx
+        - TODO
     - #### Number of brokers
         - 1:15 的broker与historical比例, 是个合理的点
         - 如果需要broker HA, 至少2个broker
@@ -144,6 +144,21 @@
             - ingestion task 也需要 merge 部分 ingestion results, 需要 direct memory 空间. [segment merging.](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#segment-merging) 
             - 计算direct memory公式: (druid.processing.numThreads + druid.processing.numMergeBuffers + 1) * druid.processing.buffer.sizeBytes
         - ##### Connection pool sizing
+            - 对于task进程, druid.server.http.numThreads 应该设置的略大于 集群中 druid.broker.http.numConnections 之和.
+            - 确保 task 能 accept 50个 queries和10个 no-queries 
     - #### Total memory usage
-    
-        
+        - Heap
+            - 1G + (2 * total size of lookup maps)
+        - Direct Memory
+            - (druid.processing.numThreads + druid.processing.numMergeBuffers + 1) * druid.processing.buffer.sizeBytes
+        - The total memory usage of the MiddleManager + Tasks
+            - MiddleManager heap size + druid.worker.capacity * (single task memory usage)
+- ### [Coordinator](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#coordinator)
+    - Coordinator 主要与性能相关的是 heap size
+    - Coordinator heap 需求大小衡量要根据 Historical servers 数量, segments 和 tasks 数.
+    - 可以配置 Coordinator heap 等于或略小于 Broker heap.
+        - 这两个进程都需要处理集群内的状态和响应api请求.
+- ### Overload
+    - Overload 主要与性能相关配置是 heap
+    - Overload heap **主要和running task 数量相关**
+    - Overload 比 Coordinator或Broker需要更少的资源, 25~50% Coordinator heap.
