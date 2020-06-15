@@ -37,7 +37,7 @@
 - ### [Historical](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#historical)
     - #### Heap size
         - 一般经验调整 historical heap size = 0.5G * number of CPU cores, 上限~24G.
-            - 注意: 这个不是确定historical heap size 的硬性指标
+            - **注意:** 这个不是确定historical heap size 的硬性指标
         - heap 太大会导致GC暂停时间过长, 设置上限~24G是为了避免这种情况.
         - 如果在 historical 启动cache, cache 将在 heap 中分配. 大小由 **druid.cache.sizeInBytes** 决定.
         - Historical out of heap 可能表明配置错误或使用模式导致集群超载.
@@ -79,10 +79,10 @@
     - #### Total memory usage
         - 使用以下准则来估算内存用量
             - Heap:
-                - (0.5GB * number of CPU cores) + (2 * total size of lookup maps) + druid.cache.sizeInBytes
+                - (0.5G * number of CPU cores) + (2 * total size of lookup maps) + druid.cache.sizeInBytes
             - Direct Memory:
                 - (druid.processing.numThreads + druid.processing.numMergeBuffers + 1) * druid.processing.buffer.sizeBytes
-        - Historical 将利用 available free system memory 采样 memory-mapping 加载磁盘数据. 为了更好的查询性能, 需要保证(free system memory / druid.server.maxSize)比例, 以便cache 更多的 segment 在内存中.
+        - Historical 将利用 available free system memory 采样 memory-mapping 加载磁盘数据. **为了更好的查询性能, 需要保证(free system memory / druid.server.maxSize)比例**, 以便cache 更多的 segment 在内存中.
     - #### Segment sizes matter
         - **确保segment size 在 300M~700M**, 以便获得最佳性能
         - [segment size optimization](https://druid.apache.org/docs/latest/operations/segment-optimization.html)
