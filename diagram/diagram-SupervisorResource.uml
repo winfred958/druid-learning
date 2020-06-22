@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="288.70000000000005" y="525.0">org.apache.druid.indexing.overlord.supervisor.SupervisorResource</node>
+    <node x="388.37333333333333" y="309.0">org.apache.druid.metadata.SQLMetadataSupervisorManager</node>
+    <node x="255.71666666666667" y="206.0">org.apache.druid.metadata.MetadataSupervisorManager</node>
+    <node x="167.95666666666665" y="309.0">org.apache.druid.indexing.overlord.supervisor.SupervisorManager</node>
+    <node x="71.25" y="628.0">org.apache.druid.indexing.kafka.supervisor.KafkaSupervisor</node>
+    <node x="165.29" y="412.0">org.apache.druid.indexing.overlord.TaskMaster</node>
+    <node x="146.96666666666667" y="0.0">org.apache.druid.indexing.overlord.supervisor.Supervisor</node>
+    <node x="0.0" y="525.0">org.apache.druid.indexing.seekablestream.supervisor.SeekableStreamSupervisor</node>
+    <node x="286.25" y="103.0">org.apache.druid.indexing.overlord.supervisor.SupervisorSpec</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.apache.druid.indexing.overlord.supervisor.SupervisorManager" target="org.apache.druid.indexing.overlord.supervisor.SupervisorSpec">
+      <point x="15.333333333333314" y="-26.5" />
+      <point x="275.28999999999996" y="279.0" />
+      <point x="245.21666666666667" y="279.0" />
+      <point x="245.21666666666667" y="186.0" />
+      <point x="334.25" y="186.0" />
+      <point x="-32.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.metadata.MetadataSupervisorManager" target="org.apache.druid.indexing.overlord.supervisor.SupervisorSpec">
+      <point x="0.0" y="-26.5" />
+      <point x="379.7166666666667" y="186.0" />
+      <point x="366.25" y="186.0" />
+      <point x="0.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.seekablestream.supervisor.SeekableStreamSupervisor" target="org.apache.druid.indexing.overlord.supervisor.Supervisor">
+      <point x="-80.0" y="-26.5" />
+      <point x="40.0" y="505.0" />
+      <point x="73.40000000000003" y="505.0" />
+      <point x="73.40000000000003" y="78.0" />
+      <point x="162.96666666666667" y="78.0" />
+      <point x="-48.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.overlord.supervisor.SupervisorResource" target="org.apache.druid.indexing.overlord.supervisor.SupervisorManager">
+      <point x="24.0" y="-26.5" />
+      <point x="408.70000000000005" y="387.0" />
+      <point x="321.28999999999996" y="387.0" />
+      <point x="61.333333333333314" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.kafka.supervisor.KafkaSupervisor" target="org.apache.druid.indexing.seekablestream.supervisor.SeekableStreamSupervisor">
+      <point x="0.0" y="-26.5" />
+      <point x="155.25" y="603.0" />
+      <point x="180.0" y="603.0" />
+      <point x="60.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.overlord.supervisor.SupervisorResource" target="org.apache.druid.indexing.overlord.TaskMaster">
+      <point x="-72.0" y="-26.5" />
+      <point x="312.70000000000005" y="495.0" />
+      <point x="254.89" y="495.0" />
+      <point x="25.599999999999994" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.seekablestream.supervisor.SeekableStreamSupervisor" target="org.apache.druid.indexing.overlord.TaskMaster">
+      <point x="80.0" y="-26.5" />
+      <point x="200.0" y="505.0" />
+      <point x="203.69" y="505.0" />
+      <point x="-25.599999999999994" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.overlord.supervisor.SupervisorManager" target="org.apache.druid.metadata.MetadataSupervisorManager">
+      <point x="76.66666666666669" y="-26.5" />
+      <point x="336.62333333333333" y="289.0" />
+      <point x="379.7166666666667" y="289.0" />
+      <point x="0.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.overlord.supervisor.SupervisorSpec" target="org.apache.druid.indexing.overlord.supervisor.Supervisor">
+      <point x="0.0" y="-26.5" />
+      <point x="366.25" y="78.0" />
+      <point x="258.9666666666667" y="78.0" />
+      <point x="48.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.overlord.TaskMaster" target="org.apache.druid.indexing.overlord.supervisor.SupervisorManager">
+      <point x="32.0" y="-26.5" />
+      <point x="261.28999999999996" y="387.0" />
+      <point x="259.95666666666665" y="387.0" />
+      <point x="0.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.metadata.SQLMetadataSupervisorManager" target="org.apache.druid.indexing.overlord.supervisor.SupervisorSpec">
+      <point x="68.0" y="-26.5" />
+      <point x="592.3733333333333" y="289.0" />
+      <point x="573.2233333333334" y="289.0" />
+      <point x="573.2233333333334" y="186.0" />
+      <point x="398.25" y="186.0" />
+      <point x="32.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.overlord.supervisor.SupervisorManager" target="org.apache.druid.indexing.overlord.supervisor.Supervisor">
+      <point x="-46.00000000000003" y="-26.5" />
+      <point x="213.95666666666662" y="289.0" />
+      <point x="209.75" y="289.0" />
+      <point x="209.75" y="78.0" />
+      <point x="226.96666666666667" y="78.0" />
+      <point x="16.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.overlord.supervisor.SupervisorResource" target="org.apache.druid.indexing.overlord.supervisor.SupervisorSpec">
+      <point x="72.0" y="-26.5" />
+      <point x="456.70000000000005" y="505.0" />
+      <point x="670.8733333333333" y="505.0" />
+      <point x="670.8733333333333" y="176.0" />
+      <point x="430.25" y="176.0" />
+      <point x="64.0" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.metadata.SQLMetadataSupervisorManager" target="org.apache.druid.metadata.MetadataSupervisorManager">
+      <point x="-68.0" y="-26.5" />
+      <point x="456.37333333333333" y="289.0" />
+      <point x="462.3833333333333" y="289.0" />
+      <point x="82.66666666666669" y="26.5" />
+    </edge>
+    <edge source="org.apache.druid.indexing.kafka.supervisor.KafkaSupervisor" target="org.apache.druid.indexing.overlord.TaskMaster">
+      <point x="56.0" y="-26.5" />
+      <point x="211.25" y="603.0" />
+      <point x="250.5" y="603.0" />
+      <point x="250.5" y="505.0" />
+      <point x="229.29" y="505.0" />
+      <point x="0.0" y="26.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="387.0" y="256.5" />
+  <SelectedNodes>
+    <node>org.apache.druid.indexing.seekablestream.supervisor.SeekableStreamSupervisor</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

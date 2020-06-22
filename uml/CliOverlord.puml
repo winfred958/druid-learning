@@ -1,0 +1,51 @@
+@startuml
+
+CliOverlord <-- SupervisorResource: Inject
+CliOverlord <-- TaskMaster: Inject
+
+TaskMaster <-- SupervisorManager: Inject
+
+
+SupervisorResource -> AuthorizationUtils: 1. authorizeAllResourceActions
+activate AuthorizationUtils #FFBBBB
+SupervisorResource <-- AuthorizationUtils: Access
+deactivate AuthorizationUtils
+
+SupervisorResource -> SupervisorManager: 2. createOrUpdateAndStartSupervisor(SupervisorSpec)
+    activate SupervisorManager #FFBBBB
+    SupervisorManager -> SupervisorManager: 3. checkXXX
+    SupervisorManager -> SupervisorManager: 4. possiblyStopAndRemoveSupervisorInternal(supervisorId,false)
+        SupervisorManager -> ConcurrentHashMap: 4.1. get(supervisorId)
+        SupervisorManager -> KafkaSupervisor: 4.2 stop
+        activate KafkaSupervisor #FFBBBB
+        KafkaSupervisor -> KafkaSupervisor: 4.3 stop
+        deactivate KafkaSupervisor
+        SupervisorManager -> ConcurrentHashMap: 4.4 remove(supervisorId)
+
+
+    SupervisorManager -> SupervisorManager: 5. createAndStartSupervisorInternal(supervisorId,true)
+        SupervisorManager -> ConcurrentHashMap: 5.1. get(supervisorId)
+        SupervisorManager -> MetadataSupervisorManager: 5.2 insert(supervisorId, SupervisorSpec)
+        activate MetadataSupervisorManager #FFBBBB
+            MetadataSupervisorManager -> SQLMetadataSupervisorManager: inster
+            activate SQLMetadataSupervisorManager #FFBBBB
+            deactivate SQLMetadataSupervisorManager
+        deactivate MetadataSupervisorManager
+        SupervisorManager -> KafkaSupervisor: 5.3 createSupervisor
+        activate KafkaSupervisor #FFBBBB
+        KafkaSupervisor -> KafkaSupervisor: 5.4 start()
+            KafkaSupervisor --> SeekableStreamSupervisor: start()
+            activate SeekableStreamSupervisor #FFBBBB
+            SeekableStreamSupervisor -> SeekableStreamSupervisor: tryInit
+            SeekableStreamSupervisor -> SeekableStreamSupervisor: runInternal
+        SupervisorManager -> ConcurrentHashMap: 5.5 put(supervisorId, Pair.of(Supervisor, SupervisorSpec))
+        deactivate KafkaSupervisor
+    deactivate SupervisorManager
+
+
+
+
+SupervisorResource -> SupervisorResource: latest. asLeaderWithSupervisorManager
+
+
+@enduml

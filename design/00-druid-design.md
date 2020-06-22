@@ -37,13 +37,13 @@ Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三�
 # Zookeeper
  - Used for internal service discovery, coordination and leader election.
 # Architecture diagram
- - ![avatar](./imges/architecture-diagram.png)
+ - ![avatar](images/architecture-diagram.png)
 # Storage design
  - ## [Datasources and segments](https://druid.apache.org/docs/latest/design/architecture.html#datasources-and-segments)
     - Each datasource is partitioned by time 并且可以使用其他属性分区.
     - Each time range is called a "chunk"(例如, 1天, 如果你的DataSource is partitioned by day). 一个chunk, 数据 partitioned 1个或多个 "segment".
     - Each segment is a single file, 通常包含几百万行数据.segment被组织到chunk中,可以想象成下面的时间轴: 
-        - ![avatar](./imges/segment.png)
+        - ![avatar](images/segment.png)
     - A datasource 可能有几个segment, 也有可能有几百万个segment.
     - Each segment 的生命周期从a middleManager开始, At this point(此刻), 他是可变的和未知的. 构建segment的处理过程包含以下过程, segment被设计成a data file 压缩并且支持快速查询.
         - Conversion to columnar format
