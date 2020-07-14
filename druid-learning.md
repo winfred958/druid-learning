@@ -1,15 +1,15 @@
 # 目录
  - 理论篇
-    - [Druid 的架构设计](./design/00-druid-design.md)
-    - [Druid 使用场景](./tutorials/01-usage-scenario.md)
+    - [Druid 的架构设计](doc/design/00-druid-design.md)
+    - [Druid 使用场景](doc/tutorials/01-usage-scenario.md)
  - 使用篇
-    - [硬件选型](./config/02-select-hardware.md)
-    - [使用导读](tutorials/04-use-tutorials.md)
-    - [集群配置篇](./tutorials/03-cluster-config.md)
-    - [配置注意事项](./config/03-config-verify&tuning.md)
+    - [硬件选型](doc/config/02-select-hardware.md)
+    - [使用导读](doc/tutorials/04-use-tutorials.md)
+    - [集群配置篇](doc/tutorials/03-cluster-config.md)
+    - [配置注意事项](doc/config/03-config-verify&tuning.md)
     - Data Ingestion
     - Data Query
  - 进阶篇
     - 资源选择和配置实践
  - Q&A
-    - [druid 时区问题](./Q&A/00.time-zone.md)
+    - [druid 时区问题](doc/Q&A/00.time-zone.md)

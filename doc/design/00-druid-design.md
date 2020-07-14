@@ -7,10 +7,10 @@
 # [Process and Servers](https://druid.apache.org/docs/latest/design/architecture.html#processes-and-servers)
 
 Druid 有几种进程类型, 如下:
- - [Overload](./03-overload.md)
- - [MiddleManager](./04-middleManager.md)
- - [Coordinator](./05-coordinator.md)
- - [Historical](./06-historical.md) 
+ - [Overload](03-overload.md)
+ - [MiddleManager](04-middleManager.md)
+ - [Coordinator](05-coordinator.md)
+ - [Historical](06-historical.md) 
  - Broker
  - Router
  
