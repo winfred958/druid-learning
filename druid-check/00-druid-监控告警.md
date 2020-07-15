@@ -69,3 +69,5 @@
 # 简要设计
 - 设计图(其中彩色为一期内容)
   - ![avatar](images/组件&架构设计.png)
+  - druid + grafana 主要用于容量展示, 可替代
+  - kafka落EMR适用于druid日志深度分析, 目前druid日志没有收集
