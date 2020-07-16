@@ -16,17 +16,23 @@
                     - overload 响应时间
                     - task 响应时间
             - task 层面
+                - supervisors
+                    - supervisors active task
+                        - partition offset
+                        - partition lag
+                        - topic agg lag
                 - task slots 占用量
                 - task processed 数据量
         - 容量建议
             - 根据容量管理模块指标, 结合既定规则给出建议
                 - 系统容量建议
                     - 内存, 磁盘IO
+                    - 扩缩容建议
                 - 进程容量建议
                     - 进程jvm信息, 线程池信息
                 - task 容量建议
                     - task processed 数据量, task建议
-                    - task slots 建议
+                    - task & slots 建议
     - 性能管理
         - 吞吐
             - 单位时间处理的数据条数或数据流量
