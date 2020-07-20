@@ -44,11 +44,11 @@
     - #### Processing Threads and Buffers
         - 请看[General Guidelines for Processing Threads and Buffers](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#processing-threads-buffers) 部分,综合描述了processing thread/buffer配置.
         - **druid.processing.numThreads**
-            - 控制用户查询结果处理线程池的大小. 这个线程池限制了可以并发处理的查询数.
+            - 控制用户查询结果处理线程池的大小. **这个线程池size限制了可以并发处理的查询数**.
             - 设置过小cpu利用率不足, 设置过大造成不必要的线程切换, 通常设置为
                 - number of cores -1
-        - **druid.processing.buffer.sizeBytes** 
-            - 控制分配给处理线程的堆外缓冲区大小
+        - **druid.processing.buffer.sizeBytes**
+            - 控制分配给处理线程的堆外缓冲区大小, 缓冲区用来合并查询结果
             - 为每个线程分配缓冲区, 一般 500M到1G之间
             - TopN和Group By 查询使用这些缓冲区存储中间结果, **随着缓冲区大小的增加, 一次可以处理更多的数据**
         - **druid.processing.numMergeBuffers**
@@ -153,6 +153,13 @@
             - (druid.processing.numThreads + druid.processing.numMergeBuffers + 1) * druid.processing.buffer.sizeBytes
         - The total memory usage of the MiddleManager + Tasks
             - MiddleManager heap size + druid.worker.capacity * (single task memory usage)
+    - #### SegmentWriteOutMediumFactory
+        - druid.peon.defaultSegmentWriteOutMediumFactory.type
+        - 当segment创建时, druid 需要临时存储一些processed data 在buffer中, 一般有以下三种
+            - druid.peon.defaultSegmentWriteOutMediumFactory.type: tmpFile (默认)
+                - 会有
+            - druid.peon.defaultSegmentWriteOutMediumFactory.type: offHeapMemory (推荐)
+            - druid.peon.defaultSegmentWriteOutMediumFactory.type: onHeapMemory
 - ### [Coordinator](https://druid.apache.org/docs/latest/operations/basic-cluster-tuning.html#coordinator)
     - Coordinator 主要与性能相关的是 heap size
     - Coordinator heap 需求大小衡量要根据 Historical servers 数量, segments 和 tasks 数.
@@ -162,3 +169,24 @@
     - Overload 主要与性能相关配置是 heap
     - Overload heap **主要和running task 数量相关**
     - Overload 比 Coordinator或Broker需要更少的资源, 25~50% Coordinator heap.
+    
+    
+## numThreads And poolSize
+### Historical config
+- 
+#### Historical query configs
+- Concurrent Requests (druid use jetty server HTTP requests)
+    - druid.server.http.numThreads
+        - Number of threads for HTTP requests.
+        - max(10, (cores * 17) / 16 + 2) + 30
+    - druid.server.http.queueSize
+        - jetty server 用户缓存客户端连接请求的队列大小, 如果队列超了, 那么客户端会观察到请求失败，TCP连接被立即关闭，服务器的响应完全为空。
+### Broker
+- druid.broker.http.numMaxThreads
+    - broker 最大的 I/O worker threads
+    - max(10, (cores * 17) / 16 + 2) + 30
+### Index Process
+- druid.server.http.numThreads
+    - 如果这个设置为 10 , 将会有10个chat handler threads(Overlord and the Indexer),和 10 个non-chat handler threads
+- druid.server.http.queueSize
+    - 阿道夫

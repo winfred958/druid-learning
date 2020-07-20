@@ -49,13 +49,13 @@
                 - 组件配置
             - task 问题定位
                 - supervisor 状态
-                     - PENDING, RUNNING, UNHELTH_SUPERVISOR ...
+                     - PENDING, RUNNING, UNHEALTHY_TASKS ...
                 - task 状态
                     - PENDING, RUNNING, FAILED
                 - task 配置问题校验
                 - task split pending 次数
                     - 是否IO等待
-                    - 是否handoff延迟(deepstorage or historical 延迟)
+                    - 是否handoff延迟(deepStorage or historical 延迟)
                 - 获取DataSource维度下, 各task 异常日志, 汇总, 例如规则引擎分析或线性回归
                 - 是否磁盘IO延迟
     - 性能分析
