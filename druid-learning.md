@@ -7,6 +7,7 @@
     - [使用导读](doc/tutorials/04-use-tutorials.md)
     - [集群配置篇](doc/tutorials/03-cluster-config.md)
     - [配置注意事项](doc/config/03-config-verify&tuning.md)
+    - [配置注意事项](doc/config/04-deep-storage-config.md)
     - Data Ingestion
     - Data Query
  - 进阶篇
