@@ -14,9 +14,16 @@
 - copy 集群的 hdfs-site.xml, 增加cos认证信息(如果没有的话)
 
 ### druid配置cos步骤
+```markdown
+3个步骤:
+  1. hadoop开启COS访问
+  2. 编写EMR引导脚本并上传COS
+  3. 配置EMR引导脚本
+详细操作步骤请看下文
+```
 - 1.控制台自助开启COS (创建但未开启 COS 的集群)
   - 文档: [https://cloud.tencent.com/document/product/589/40366](https://cloud.tencent.com/document/product/589/40366)
-  - 配置完成后, EMR会在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加cos配置信息
+  - 配置完成后, EMR会自动在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加cos配置信息, 至此, 使用hdfs命令即可访问cos数据
     - ```xml
       <configuration>
        <property>
@@ -85,6 +92,6 @@
       ln -s /usr/local/service/hadoop/etc/hadoop/yarn-site.xml    /usr/local/service/druid/conf/druid/_common/yarn-site.xml
       ```
   - 脚本上传至cos
-- 3.配置EMR引导操作脚本, (集群启动前)
-  - EMR引导操作文档 
+- 3.配置EMR引导操作脚本, (选择 - 集群启动前)
+  - EMR引导操作文档
     - [https://cloud.tencent.com/document/product/589/35656](https://cloud.tencent.com/document/product/589/35656)
