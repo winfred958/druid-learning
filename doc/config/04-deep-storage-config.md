@@ -76,8 +76,11 @@
        </property>
       </configuration>
       ```
-  - 至此, 使用hdfs命令即可访问cos数据
+  - 至此, 就可以使用hdfs命令访问cos数据
+    - hadoop fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
 - 2.编写EMR引导操作脚本, 并上传至cos
+  - 步骤1, 中hadoop已经集成了cos, 现在只需要软链接hadoop配置至druid _common配置中; 然后修改druid.storage.storageDirectory路径至cos
+    - 例如, druid.storage.storageDirectory=cosn://emr-druid-deep-test-1258469122/druid/segment
   - 参考脚本, 其中**druid.storage.storageDirectory需要根据实际COS路径修改**
     - ```shell script
       #!/bin/bash
