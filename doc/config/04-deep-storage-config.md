@@ -9,7 +9,7 @@
   - druid.extensions.loadList=["druid-hdfs-storage"]
   - druid.storage.type=hdfs
 - 需要修改项
-  - druid.storage.storageDirectory=cosn://<bucket-name>-<appid>/druid/segments
+  - druid.storage.storageDirectory=cosn://\<BucketName\>-\<AppId>/\<path\>/druid/segments
 ### conf/druid/_common/hdfs-site.xml
 - copy 集群的 hdfs-site.xml, 增加cos认证信息(如果没有的话)
 
