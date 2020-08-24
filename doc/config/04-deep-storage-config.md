@@ -23,7 +23,7 @@
 ```
 - 1.控制台自助开启COS (创建但未开启 COS 的集群)
   - 文档: [https://cloud.tencent.com/document/product/589/40366](https://cloud.tencent.com/document/product/589/40366)
-  - 配置完成后, EMR会自动在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加cos配置信息, 至此, 使用hdfs命令即可访问cos数据
+  - 配置完成后, EMR会自动在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加如下cos配置信息
     - ```xml
       <configuration>
        <property>
@@ -76,6 +76,7 @@
        </property>
       </configuration>
       ```
+  - 至此, 使用hdfs命令即可访问cos数据
 - 2.编写EMR引导操作脚本, 并上传至cos
   - 参考脚本, 其中**druid.storage.storageDirectory需要根据实际COS路径修改**
     - ```shell script
