@@ -2,7 +2,7 @@
 ## Overview
 - overload coordinator 节点对计算资源要求较小.
 - historical, middleManager, broker 节点比较吃资源.
-    - broker, middleManager 主要吃CPU和内存资源.
+    - broker, middleManager 主要吃CPU和内存资源, middleManager peon 对磁盘IO要求较高, 建议SSD
     - historical 主要吃内存和磁盘.
 - broker 数量主要用于查询的并行度.
 ## 硬件选择
