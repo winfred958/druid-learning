@@ -6,17 +6,17 @@
     - historical 主要吃内存和磁盘.
 - broker 数量主要用于查询的并行度.
 ## 硬件选择
-- master server, 负责元数据和zk等task协调, 主要考虑CPU RAM (标准型)
+- master server **(overload, coordinator)**, 负责元数据和zk等task协调, 主要考虑CPU RAM (标准型)
     - 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
         - CPU 8 vCPUs
         - RAM 31 GB RAM
-- data server, 数据index, cache (memory-mapping), 子查询处理, IO要求高, 主要考虑CPU RAM SSD (高IO型 + 高内存 + SSD)
+- data server **(historical, middleManager)**, 数据index, cache (memory-mapping), 子查询处理, IO要求高, 主要考虑CPU RAM SSD (高IO型 + 高内存 + SSD)
     - 例如:  [AWS i3.4xlarge](https://aws.amazon.com/ec2/instance-types/i3/)
         - CPU 16 vCPUs +
         - RAM 128G ~ 256G
         - SSD 1.2T ~ 2*1.9T 
             - **磁盘不易过大, 过大会造成historical加载segment过多, 影响加载和查询效率**
-- query server, 查询下发, merger结果,内存cache, 主要考虑CPU RAM (标准型 or 高IO型)
+- query server **(broker)**, 查询下发, merger结果,内存cache, 主要考虑CPU RAM (标准型 or 高IO型)
     - 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
         - CPU 8 vCPUs +
         - RAM 31 GB RAM +
