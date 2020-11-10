@@ -9,7 +9,7 @@
 - master server **(overload, coordinator)**, 负责元数据和zk等task协调, 主要考虑CPU RAM (标准型)
     - 例如: [AWS m5.2xlarge](https://aws.amazon.com/ec2/instance-types/m5/)
         - CPU 8 vCPUs
-        - RAM 31 GB RAM (仅overlord和coordinator内存容量 )
+        - RAM 32 GB+ RAM (仅overlord和coordinator内存容量 )
 - data server **(historical, middleManager)**, 数据index, cache (memory-mapping), 子查询处理, IO要求高, 主要考虑CPU RAM SSD (高IO型 + 高内存 + SSD)
     - 例如:  [AWS i3.4xlarge](https://aws.amazon.com/ec2/instance-types/i3/)
         - CPU 16 vCPUs +
