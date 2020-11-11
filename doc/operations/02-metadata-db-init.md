@@ -1,5 +1,7 @@
 # [Initializing the new metadata store](https://druid.apache.org/docs/latest/operations/metadata-migration.html#initializing-the-new-metadata-store)
 
+CREATE DATABASE `druid` DEFAULT CHARACTER SET utf8mb4;
+
 ## MySQL
 ```shell script
 cd ${DRUID_ROOT}
