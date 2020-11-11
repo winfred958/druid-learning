@@ -4,7 +4,7 @@
 ```shell script
 cd ${DRUID_ROOT}
 
-java 
+java \
  -classpath "lib/*" \
  -Dlog4j.configurationFile=conf/druid/cluster/_common/log4j2.xml \
  -Ddruid.extensions.directory="extensions" \
