@@ -1,6 +1,6 @@
 # DeepStorage config
 
-##1. druid使用本地hdfs作为DeepStorage
+## 1. druid使用本地hdfs作为DeepStorage
 ### 1.1. 软链接本地hadoop配置文件到 druid common目录
 - 参考脚本
     - ```shell 
@@ -14,7 +14,7 @@
   - druid.storage.type=hdfs
 ### 1.3 配置下发, 重启 middleManager historical
 
-##2. druid使用remote hdfs作为DeepStorage
+## 2. druid使用remote hdfs作为DeepStorage
 
 ```markdown
 方案一. 修改druid集群 hdfs默认配置(不推荐, 方案暂时不可行)
