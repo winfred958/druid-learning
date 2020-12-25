@@ -1,18 +1,19 @@
 # DeepStorage config
 
 ## 1. druid使用本地hdfs作为DeepStorage
-### 1.1. 软链接本地hadoop配置文件到 druid common目录
+
+#### 1.1. 软链接本地hadoop配置文件到 druid common目录
 - 参考脚本
     - ```shell 
       cd /usr/local/service/druid/conf/druid/_common/
       ln -s /usr/local/service/hadoop/etc/hadoop/core-site.xml core-site.xml
       ln -s /usr/local/service/hadoop/etc/hadoop/hdfs-site.xml hdfs-site.xml
       ```
-### 1.2. 控制台配置segments存储路径, ${DRUID_HOME}/conf/druid/_common/common.runtime.properties
+#### 1.2. 控制台配置segments存储路径, ${DRUID_HOME}/conf/druid/_common/common.runtime.properties
 - 已经存在项
-  - druid.extensions.loadList=["druid-hdfs-storage"]
-  - druid.storage.type=hdfs
-### 1.3 配置下发, 重启 middleManager historical
+    - druid.extensions.loadList=["druid-hdfs-storage"]
+    - druid.storage.type=hdfs
+#### 1.3 配置下发, 重启 middleManager historical
 
 ## 2. druid使用remote hdfs作为DeepStorage
 
@@ -24,10 +25,10 @@
 - 缺点, 扩容麻烦(可以采用EMR引导操作解决)
 ```
 
-### 2.1 download remote hdfs config 保存到本地ide
-### 2.2 修改关键配置(如果需要的话)
-### 2.3 上传配置到cos指定目录 (该目录为用户自定义, 存放配置文件目录)
-### 2.4 编写引导操作脚本, 并且上传到druid集群同地域的cos目录(用户自定义存放引导脚本的目录)
+#### 2.1 download remote hdfs config 保存到本地ide
+#### 2.2 修改关键配置(如果需要的话)
+#### 2.3 上传配置到cos指定目录 (该目录为用户自定义, 存放配置文件目录)
+#### 2.4 编写引导操作脚本, 并且上传到druid集群同地域的cos目录(用户自定义存放引导脚本的目录)
 - 编写shell脚本, 脚本功能为下载 cos文件(步骤2.3产生)放置到druid common 配置目录
     - 脚本参考, 注意 ${BUKET_NAME} ${APP_ID} 等为变量, 需要替换为实际值
         - ```shell script
@@ -41,7 +42,7 @@
           wget https://${BUKET_NAME}-${APP_ID}.cos.${REGION_TAG}.myqcloud.com/${FOLDER}/yarn-site.xml
           wget https://${BUKET_NAME}-${APP_ID}.cos.${REGION_TAG}.myqcloud.com/${FOLDER}/mapred-site.xml
           ```
-### 2.5 配置EMR引导操作, [EMR 引导操作文档](https://cloud.tencent.com/document/product/589/35656)      
+#### 2.5 配置EMR引导操作, [EMR 引导操作文档](https://cloud.tencent.com/document/product/589/35656)      
 - 引导时机选择 
     - 选择 - 集群启动前
 
@@ -52,10 +53,10 @@
 ```
 ### 3.1. conf/druid/_common/common.runtime.properties
 - cos 依赖druid-hdfs-storage扩展
-  - druid.extensions.loadList=["druid-hdfs-storage"]
-  - druid.storage.type=hdfs
+    - druid.extensions.loadList=["druid-hdfs-storage"]
+    - druid.storage.type=hdfs
 - 需要修改项
-  - druid.storage.storageDirectory=cosn://\<BucketName\>-\<AppId>/\<path\>/druid/segments
+    - druid.storage.storageDirectory=cosn://\<BucketName\>-\<AppId>/\<path\>/druid/segments
 
 ### 3.2. druid配置cos步骤
 ```markdown
@@ -66,67 +67,67 @@
 详细操作步骤请看下文
 ```
 - 1.控制台自助开启COS (创建但未开启 COS 的集群)
-  - 目前版本, EMR已经默认开启COS(dependency-jar: /usr/local/service/hadoop/share/hadoop/common/lib/hadoop-temrfs-*.jar)
-  -EMR会自动在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加如下cos相关配置信息
-    - ```xml
-      <configuration>
-        <property>
-          <name>fs.cos.buffer.dir</name>
-          <value>/data/emr/hdfs/tmp</value>
-        </property>
-        <property>
-          <name>fs.cos.local_block_size</name>
-          <value>2097152</value>
-        </property>
-        <property>
-          <name>fs.cos.userinfo.appid</name>
-          <value>${appId}</value>
-        </property>
-        <property>
-          <name>fs.cos.userinfo.region</name>
-          <value>gz</value>
-        </property>
-        <property>
-          <name>fs.cos.userinfo.useCDN</name>
-          <value>false</value>
-        </property>
-        <property>
-          <name>fs.cosn.block.size</name>
-          <value>67108864</value>
-        </property>
-        <property>
-          <name>fs.cosn.credentials.provider</name>
-          <value>org.apache.hadoop.fs.auth.EMRInstanceCredentialsProvider</value>
-        </property>
-        <property>
-          <name>fs.cosn.impl</name>
-          <value>org.apache.hadoop.fs.cosnative.NativeCosFileSystem</value>
-        </property>
-        <property>
-          <name>fs.cosn.local_block_size</name>
-          <value>2097152</value>
-        </property>
-        <property>
-          <name>fs.cosn.tmp.dir</name>
-          <value>/data/emr/hdfs/tmp/hadoop_cos</value>
-        </property>
-        <property>
-          <name>fs.cosn.upload.buffer</name>
-          <value>mapped_disk</value>
-        </property>
-        <property>
-          <name>fs.cosn.upload.buffer.size</name>
-          <value>-1</value>
-        </property>
-        <property>
-          <name>fs.cosn.userinfo.region</name>
-          <value>ap-guangzhou</value>
-        </property>
-      </configuration>
-      ```
-  - 至此, 就可以使用hdfs命令访问cos数据
-    - hadoop fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
-    - hadoop --config ${HADOOP_CONF_DIR} fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
+    - 目前版本, EMR已经默认开启COS(dependency-jar: /usr/local/service/hadoop/share/hadoop/common/lib/hadoop-temrfs-*.jar)
+    -EMR会自动在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加如下cos相关配置信息
+        - ```xml
+          <configuration>
+            <property>
+              <name>fs.cos.buffer.dir</name>
+              <value>/data/emr/hdfs/tmp</value>
+            </property>
+            <property>
+              <name>fs.cos.local_block_size</name>
+              <value>2097152</value>
+            </property>
+            <property>
+              <name>fs.cos.userinfo.appid</name>
+              <value>${appId}</value>
+            </property>
+            <property>
+              <name>fs.cos.userinfo.region</name>
+              <value>gz</value>
+            </property>
+            <property>
+              <name>fs.cos.userinfo.useCDN</name>
+              <value>false</value>
+            </property>
+            <property>
+              <name>fs.cosn.block.size</name>
+              <value>67108864</value>
+            </property>
+            <property>
+              <name>fs.cosn.credentials.provider</name>
+              <value>org.apache.hadoop.fs.auth.EMRInstanceCredentialsProvider</value>
+            </property>
+            <property>
+              <name>fs.cosn.impl</name>
+              <value>org.apache.hadoop.fs.cosnative.NativeCosFileSystem</value>
+            </property>
+            <property>
+              <name>fs.cosn.local_block_size</name>
+              <value>2097152</value>
+            </property>
+            <property>
+              <name>fs.cosn.tmp.dir</name>
+              <value>/data/emr/hdfs/tmp/hadoop_cos</value>
+            </property>
+            <property>
+              <name>fs.cosn.upload.buffer</name>
+              <value>mapped_disk</value>
+            </property>
+            <property>
+              <name>fs.cosn.upload.buffer.size</name>
+              <value>-1</value>
+            </property>
+            <property>
+              <name>fs.cosn.userinfo.region</name>
+              <value>ap-guangzhou</value>
+            </property>
+          </configuration>
+          ```
+    - 至此, 就可以使用hdfs命令访问cos数据
+      - hadoop fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
+      - hadoop --config ${HADOOP_CONF_DIR} fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
   
 ### 3.2. EMR中COS配置详解
 
