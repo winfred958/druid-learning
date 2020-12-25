@@ -121,17 +121,17 @@
         - hadoop fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
         - hadoop --config ${HADOOP_CONF_DIR} fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
   
-### 3.2. EMR中COS配置详解
+### 3.2. EMR中COS配置详解, 参考[hadoop-cos](https://github.com/tencentyun/hadoop-cos)
 
 | 序号 | key | required | default value  | 描述 |
 | :---- | :---- | :----: | :---- | :---- |
-| 1  | fs.cos.buffer.dir            |  | /data/emr/hdfs/tmp |  |
-| 2  | fs.cos.local_block_size      |  | 2097152 |  |
-| 3  | fs.cos.userinfo.appid        |  | ${appId} | appid |
-| 4  | fs.cos.userinfo.region       |  | region id | 集群所在地域 |
-| 5  | fs.cos.userinfo.useCDN       |  | false |  |
-| 6  | fs.cosn.block.size           |  | 67108864 | CosN 文件系统 block size。 |
-| 7  | fs.cosn.credentials.provider | no | org.apache.hadoop.fs.auth.EMRInstanceCredentialsProvider | EMR 扩展了cos的认证方式EMRInstanceCredentialsProvider, 配置 SecretId 和 SecretKey 的获取方式。当前支持五种获取方式：1.org.apache.hadoop.fs.auth.SessionCredential Provider：从请求 URI 中获取 secret id 和 secret key。 其格式为：cosn://{secretId}:{secretKey}@examplebucket-1250000000/； 2.org.apache.hadoop.fs.auth.SimpleCredentialProvider： 从 core-site.xml 配置文件中读取 fs.cosn.userinfo.secretId 和 fs.cosn.userinfo.secretKey 来获取 SecretId 和 SecretKey； 3.org.apache.hadoop.fs.auth.EnvironmentVariableCredential Provider：从系统环境变量 COS_SECRET_ID 和 COS_SECRET_KEY 中获取； 4.org.apache.hadoop.fs.auth.CVMInstanceCredentials Provider：利用腾讯云云服务器（CVM）绑定的角色，获取访问 COS 的临时密钥； 5.org.apache.hadoop.fs.auth.CPMInstanceCredentialsProvider： 利用腾讯云黑石物理机（CPM）绑定的角色，获取访问 COS 的临时密钥。|
+| 1  | fs.cos.buffer.dir            | yes | /data/emr/hdfs/tmp | 用于缓冲文件上传 |
+| 2  | fs.cos.local_block_size      | no | 2097152 | 默认读取 block size |
+| 3  | fs.cos.userinfo.appid        | yes | ${appId} | appid |
+| 4  | fs.cos.userinfo.region       | yes | region id | 集群所在地域 |
+| 5  | fs.cos.userinfo.useCDN       | no | false |  |
+| 6  | fs.cosn.block.size           | no | 134217728(128M) | CosN 文件系统 block size。 默认 134217728(128M)|
+| 7  | fs.cosn.credentials.provider | no | org.apache.hadoop.fs.auth.EMRInstanceCredentialsProvider | EMR认证方式 [EMRInstanceCredentialsProvider](https://github.com/tencentyun/hadoop-cos/blob/master/src/main/java/org/apache/hadoop/fs/auth/EMRInstanceCredentialsProvider.java) ; 配置 SecretId 和 SecretKey 的获取方式。当前支持五种获取方式：1.org.apache.hadoop.fs.auth.SessionCredential Provider：从请求 URI 中获取 secret id 和 secret key。 其格式为：cosn://{secretId}:{secretKey}@examplebucket-1250000000/； 2.org.apache.hadoop.fs.auth.SimpleCredentialProvider： 从 core-site.xml 配置文件中读取 fs.cosn.userinfo.secretId 和 fs.cosn.userinfo.secretKey 来获取 SecretId 和 SecretKey； 3.org.apache.hadoop.fs.auth.EnvironmentVariableCredential Provider：从系统环境变量 COS_SECRET_ID 和 COS_SECRET_KEY 中获取； 4.org.apache.hadoop.fs.auth.CVMInstanceCredentials Provider：利用腾讯云云服务器（CVM）绑定的角色，获取访问 COS 的临时密钥； 5.org.apache.hadoop.fs.auth.CPMInstanceCredentialsProvider： 利用腾讯云黑石物理机（CPM）绑定的角色，获取访问 COS 的临时密钥。|
 | 8  | fs.cosn.impl                 | yes | org.apache.hadoop.fs.cosnative.NativeCosFileSystem | cosn 对 FileSystem 的实现类，固定为 org.apache.hadoop.fs.CosFileSystem。 |
 | 9  | fs.cosn.local_block_size     |  | 2097152 |  |
 | 10 | fs.cosn.tmp.dir              | no | /data/emr/hdfs/tmp/hadoop_cos | 请设置一个实际存在的本地目录，运行过程中产生的临时文件会暂时放于此处。 |
