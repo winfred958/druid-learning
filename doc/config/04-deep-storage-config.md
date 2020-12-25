@@ -58,17 +58,9 @@
 - 需要修改项
     - druid.storage.storageDirectory=cosn://\<BucketName\>-\<AppId>/\<path\>/druid/segments
 
-### 3.2. druid配置cos步骤
-```markdown
-3个步骤:
-  1. EMR或hdfs开启COS访问
-  2. 编写EMR引导脚本并上传COS, (EMR引导操作使用)
-  3. 配置EMR引导脚本
-详细操作步骤请看下文
-```
-- 1.控制台自助开启COS (创建但未开启 COS 的集群)
-    - 目前版本, EMR已经默认开启COS(dependency-jar: /usr/local/service/hadoop/share/hadoop/common/lib/hadoop-temrfs-*.jar)
-    -EMR会自动在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加如下cos相关配置信息
+### 3.2. druid集群cos配置信息
+- 目前版本, EMR已经默认开启COS(dependency-jar: /usr/local/service/hadoop/share/hadoop/common/lib/hadoop-temrfs-*.jar)
+    - EMR会自动在hadoop配置文件/usr/local/service/hadoop/etc/hadoop/core-site.xml 增加如下cos相关配置信息
         - ```xml
           <configuration>
             <property>
@@ -126,22 +118,22 @@
           </configuration>
           ```
     - 至此, 就可以使用hdfs命令访问cos数据
-      - hadoop fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
-      - hadoop --config ${HADOOP_CONF_DIR} fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
+        - hadoop fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
+        - hadoop --config ${HADOOP_CONF_DIR} fs -ls cosn://\<BucketName\>-\<AppId>/\<path\>
   
 ### 3.2. EMR中COS配置详解
 
 | 序号 | key | required | default value  | 描述 |
 | :---- | :---- | :----: | :---- | :---- |
-| 1  | fs.cos.buffer.dir            | required | /data/emr/hdfs/tmp |  |
-| 2  | fs.cos.local_block_size      | required | 2097152 |  |
-| 3  | fs.cos.userinfo.appid        | required | ${appId} | appid |
-| 4  | fs.cos.userinfo.region       | required | region id | 集群所在地域 |
-| 5  | fs.cos.userinfo.useCDN       | required | false |  |
-| 6  | fs.cosn.block.size           | required | 67108864 | CosN 文件系统 block size。 |
+| 1  | fs.cos.buffer.dir            |  | /data/emr/hdfs/tmp |  |
+| 2  | fs.cos.local_block_size      |  | 2097152 |  |
+| 3  | fs.cos.userinfo.appid        |  | ${appId} | appid |
+| 4  | fs.cos.userinfo.region       |  | region id | 集群所在地域 |
+| 5  | fs.cos.userinfo.useCDN       |  | false |  |
+| 6  | fs.cosn.block.size           |  | 67108864 | CosN 文件系统 block size。 |
 | 7  | fs.cosn.credentials.provider | no | org.apache.hadoop.fs.auth.EMRInstanceCredentialsProvider | EMR 扩展了cos的认证方式EMRInstanceCredentialsProvider, 配置 SecretId 和 SecretKey 的获取方式。当前支持五种获取方式：1.org.apache.hadoop.fs.auth.SessionCredential Provider：从请求 URI 中获取 secret id 和 secret key。 其格式为：cosn://{secretId}:{secretKey}@examplebucket-1250000000/； 2.org.apache.hadoop.fs.auth.SimpleCredentialProvider： 从 core-site.xml 配置文件中读取 fs.cosn.userinfo.secretId 和 fs.cosn.userinfo.secretKey 来获取 SecretId 和 SecretKey； 3.org.apache.hadoop.fs.auth.EnvironmentVariableCredential Provider：从系统环境变量 COS_SECRET_ID 和 COS_SECRET_KEY 中获取； 4.org.apache.hadoop.fs.auth.CVMInstanceCredentials Provider：利用腾讯云云服务器（CVM）绑定的角色，获取访问 COS 的临时密钥； 5.org.apache.hadoop.fs.auth.CPMInstanceCredentialsProvider： 利用腾讯云黑石物理机（CPM）绑定的角色，获取访问 COS 的临时密钥。|
 | 8  | fs.cosn.impl                 | yes | org.apache.hadoop.fs.cosnative.NativeCosFileSystem | cosn 对 FileSystem 的实现类，固定为 org.apache.hadoop.fs.CosFileSystem。 |
-| 9  | fs.cosn.local_block_size     | required | 2097152 |  |
+| 9  | fs.cosn.local_block_size     |  | 2097152 |  |
 | 10 | fs.cosn.tmp.dir              | no | /data/emr/hdfs/tmp/hadoop_cos | 请设置一个实际存在的本地目录，运行过程中产生的临时文件会暂时放于此处。 |
 | 11 | fs.cosn.upload.buffer        | no | mapped_disk | CosN 文件系统上传时依赖的缓冲区类型。当前支持三种类型的缓冲区：非直接内存缓冲区（non_direct_memory），直接内存缓冲区（direct_memory），磁盘映射缓冲区（mapped_disk）。非直接内存缓冲区使用的是 JVM 堆内存，直接内存缓冲区使用的是堆外内存，而磁盘映射缓冲区则是基于内存文件映射得到的缓冲区。 |
 | 12 | fs.cosn.upload.buffer.size   | no | -1 | CosN 文件系统上传时依赖的缓冲区大小，如果指定为-1，则表示不限制缓冲区。若不限制缓冲区大小，则缓冲区的类型必须为 mapped_disk。如果指定大小大于0，则要求该值至少大于等于一个 block 的大小。兼容原有配置 fs.cosn.buffer.size。 |
