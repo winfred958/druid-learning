@@ -1,6 +1,6 @@
 # DeepStorage config
 - 目录
-    - [druid使用本地hdfs作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#11-%E8%BD%AF%E9%93%BE%E6%8E%A5%E6%9C%AC%E5%9C%B0hadoop%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0-druid-common%E7%9B%AE%E5%BD%95)
+    - [druid使用local hdfs作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#11-%E8%BD%AF%E9%93%BE%E6%8E%A5%E6%9C%AC%E5%9C%B0hadoop%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0-druid-common%E7%9B%AE%E5%BD%95)
     - [druid使用remote hdfs作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#2-druid%E4%BD%BF%E7%94%A8remote-hdfs%E4%BD%9C%E4%B8%BAdeepstorage)
     - [cos作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#3-cos%E4%BD%9C%E4%B8%BAdeepstorage)
 
@@ -29,9 +29,8 @@
 - 缺点, 扩容麻烦(可以采用EMR引导操作解决, 可以在druid启动前从远程(cos)下载配置)
 ```
 
-### 2.1 download remote hdfs config 保存到本地ide
-### 2.2 修改关键配置(如果需要的话)
-### 2.3 hdfs config copy到  druid common 目录
+### 2.1 download remote hdfs config 保存到本地IDE修改关键配置(如果需要的话)
+### 2.2 remote hdfs config copy到  druid common 目录
 - **注意**, 针对cos的配置
     - ```text
       EMR Druid 目前版本默认包含cos配置并且进行了优化封装
@@ -39,9 +38,9 @@
       ```
 - cos详细配置请看第3部分 [cos作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#3-cos%E4%BD%9C%E4%B8%BAdeepstorage)
 
-### 2.4 配置EMR引导操作, 目的是在集群扩容时自动下载指定的hadoop配置
-#### 2.4.1 上传配置到cos指定目录 (该目录为用户自定义, 存放配置文件目录)
-#### 2.4.2 编写引导操作脚本, 并且上传到druid集群同地域的cos目录(用户自定义存放引导脚本的目录)
+### 2.3 配置EMR引导操作, 目的是在集群扩容时自动下载指定的hadoop配置
+#### 2.3.1 上传hadoop配置到cos指定目录 (该目录为用户自定义, 存放配置文件目录)
+#### 2.3.2 编写引导操作脚本, 并且上传到druid集群同地域的cos目录(用户自定义存放引导脚本的目录)
 - 编写shell脚本, 脚本功能为下载 cos文件(步骤2.3产生)放置到druid common 配置目录
     - 脚本参考, 注意 ${BUKET_NAME} ${APP_ID} 等为变量, 需要替换为实际值
         - ```shell script
@@ -55,7 +54,7 @@
           wget https://${BUKET_NAME}-${APP_ID}.cos.${REGION_TAG}.myqcloud.com/${FOLDER}/yarn-site.xml
           wget https://${BUKET_NAME}-${APP_ID}.cos.${REGION_TAG}.myqcloud.com/${FOLDER}/mapred-site.xml
           ```
-#### 2.4.3 配置EMR引导操作, [EMR 引导操作文档](https://cloud.tencent.com/document/product/589/35656)      
+#### 2.3.3 配置EMR引导操作, [EMR 引导操作文档](https://cloud.tencent.com/document/product/589/35656)      
 - 引导时机选择 
     - 选择 - 集群启动前
 
@@ -63,6 +62,7 @@
 ```text
 文档编写时间2020年12月25日
 目前版本创建的druid集群默认支持cos
+以下是默认配置
 ```
 ### 3.1. conf/druid/_common/common.runtime.properties
 - cos 依赖druid-hdfs-storage扩展
