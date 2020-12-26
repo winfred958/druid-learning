@@ -1,4 +1,8 @@
 # DeepStorage config
+- 目录
+    - [druid使用本地hdfs作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#11-%E8%BD%AF%E9%93%BE%E6%8E%A5%E6%9C%AC%E5%9C%B0hadoop%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0-druid-common%E7%9B%AE%E5%BD%95)
+    - [druid使用remote hdfs作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#2-druid%E4%BD%BF%E7%94%A8remote-hdfs%E4%BD%9C%E4%B8%BAdeepstorage)
+    - [cos作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#3-cos%E4%BD%9C%E4%B8%BAdeepstorage)
 
 ## 1. druid使用本地hdfs作为DeepStorage
 
@@ -28,12 +32,14 @@
 ### 2.1 download remote hdfs config 保存到本地ide
 ### 2.2 修改关键配置(如果需要的话)
 ### 2.3 hdfs config copy到  druid common 目录
-- **注意**, 针对cos的配置, 详细请看第3部分 cos作为DeepStorage
+- **注意**, 针对cos的配置
     - ```text
       EMR Druid 目前版本默认包含cos配置并且进行了优化封装
       copy 配置时需要注意EMR版本间的差异, cos 需要和druid 本地配置保持一致, 必要时需要手动修改cos配置
       ```
-### 2.4 配置EMR引导操作, 目的是在集群扩容时自动下载hadoop配置
+- cos详细请看第3部分 [cos作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#3-cos%E4%BD%9C%E4%B8%BAdeepstorage)
+
+### 2.4 配置EMR引导操作, 目的是在集群扩容时自动下载指定的hadoop配置
 #### 2.4.1 上传配置到cos指定目录 (该目录为用户自定义, 存放配置文件目录)
 #### 2.4.2 编写引导操作脚本, 并且上传到druid集群同地域的cos目录(用户自定义存放引导脚本的目录)
 - 编写shell脚本, 脚本功能为下载 cos文件(步骤2.3产生)放置到druid common 配置目录
