@@ -8,7 +8,7 @@
 
 #### 1.1. 软链接本地hadoop配置文件到 druid common目录
 - 参考脚本
-    - ```shell 
+    - ```shell
       cd /usr/local/service/druid/conf/druid/_common/
       ln -s /usr/local/service/hadoop/etc/hadoop/core-site.xml core-site.xml
       ln -s /usr/local/service/hadoop/etc/hadoop/hdfs-site.xml hdfs-site.xml
@@ -37,7 +37,7 @@
       EMR Druid 目前版本默认包含cos配置并且进行了优化封装
       copy 配置时需要注意EMR版本间的差异, cos 需要和druid 本地配置保持一致, 必要时需要手动修改cos配置
       ```
-- cos详细请看第3部分 [cos作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#3-cos%E4%BD%9C%E4%B8%BAdeepstorage)
+- cos详细配置请看第3部分 [cos作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#3-cos%E4%BD%9C%E4%B8%BAdeepstorage)
 
 ### 2.4 配置EMR引导操作, 目的是在集群扩容时自动下载指定的hadoop配置
 #### 2.4.1 上传配置到cos指定目录 (该目录为用户自定义, 存放配置文件目录)
