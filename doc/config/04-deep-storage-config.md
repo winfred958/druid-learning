@@ -39,8 +39,10 @@
 - cos详细配置请看第3部分 [cos作为DeepStorage](https://github.com/winfred958/druid-learning/blob/master/doc/config/04-deep-storage-config.md#3-cos%E4%BD%9C%E4%B8%BAdeepstorage)
 
 ### 2.3 配置EMR引导操作, 目的是在集群扩容时自动下载指定的hadoop配置
-#### 2.3.1 上传hadoop配置到cos指定目录 (该目录为用户自定义, 存放配置文件目录)
-#### 2.3.2 编写引导操作脚本, 并且上传到druid集群同地域的cos目录(用户自定义存放引导脚本的目录)
+#### 2.3.1 上传hadoop配置到druid集群同地域的cos目录(该目录为用户自定义, 存放配置文件目录)
+- 上传配置到自定义cos目录
+- 记录文件地址
+#### 2.3.2 编写引导操作脚本, 并且上传到druid集群同地域的cos目录(用该目录为用户自定义, 存放引导脚本的目录)
 - 编写shell脚本, 脚本功能为下载 cos文件(步骤2.3产生)放置到druid common 配置目录
     - 脚本参考, 注意 ${BUKET_NAME} ${APP_ID} 等为变量, 需要替换为实际值
         - ```shell script
