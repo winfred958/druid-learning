@@ -8,7 +8,7 @@
 
 # [Process and Servers](https://druid.apache.org/docs/latest/design/architecture.html#processes-and-servers)
 
-Druid 有几种进程类型, 如下:
+## Druid 以下有几种进程, 如下:
 
 - [Overload](03-overload.md)
 - [MiddleManager](04-middleManager.md)
@@ -16,6 +16,9 @@ Druid 有几种进程类型, 如下:
 - [Historical](06-historical.md)
 - [Broker](07-broker.md)
 - [Router]
+
+## 架构图
+- - ![avatar](images/my-architecture-diagram.png)
 
 Druid 进程能被任意部署, 但是为了部署简单, 我们推荐区分三种Server Type:
 

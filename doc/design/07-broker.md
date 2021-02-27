@@ -2,7 +2,13 @@
 
 ## Configuration
 
+- For Apache Druid Broker Process Configuration,
+  see [Broker Configuration](https://druid.apache.org/docs/latest/configuration/index.html#broker).
+
 ## HTTP endpoints
+
+- For a list of API endpoints supported by the Broker,
+  see [Broker API](https://druid.apache.org/docs/latest/operations/api-reference.html#broker).
 
 ## Overview
 
