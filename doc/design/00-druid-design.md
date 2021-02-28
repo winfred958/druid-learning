@@ -9,7 +9,7 @@
 ## 架构图
 
 - 整体架构图
-    - ![avatar](images/my-architecture-diagram.png)
+    - ![avatar](images/my-architecture-diagram.jpg)
 
 # [Process and Servers](https://druid.apache.org/docs/latest/design/architecture.html#processes-and-servers)
 
