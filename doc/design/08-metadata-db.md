@@ -17,7 +17,7 @@
         "metrics":"comma-delimited-list-of-metric-names",
         "shardSpec":{"type":"none"},
         "binaryVersion":9,
-        "size": size_of_segment,
+        "size": "${size_of_segment}",
         "identifier":"wikipedia_2012-05-23T00:00:00.000Z_2012-05-24T00:00:00.000Z_2012-05-23T00:10:00.046Z"
     }
   ```

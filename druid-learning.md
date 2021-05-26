@@ -1,8 +1,9 @@
 # 目录
- - 理论篇
+
+- 理论篇
     - [Druid 的架构设计](doc/design/00-druid-design.md)
     - [Druid 使用场景](doc/tutorials/01-usage-scenario.md)
- - 使用篇
+- 使用篇
     - [硬件选型](doc/config/02-select-hardware.md)
     - [使用导读](doc/tutorials/04-use-tutorials.md)
     - [集群配置篇](doc/tutorials/03-cluster-config.md)
@@ -10,7 +11,14 @@
     - [DeepStorage配置](doc/config/04-deep-storage-config.md)
     - Data Ingestion
     - Data Query
- - 进阶篇
+- 进阶篇
     - 资源选择和配置实践
- - Q&A
+    - [数据迁移](doc/operations/03-druid-单数据源迁移.md)
+- Q&A
     - [druid 时区问题](doc/Q&A/00.time-zone.md)
+    - [ingestion-task-疑难杂症](doc/Q&A/01.ingestion-task-疑难杂症.md)
+    - [ingestion-task-疑难杂症](doc/Q&A/01.ingestion-task-疑难杂症.md)
+    - [常见的使用问题](doc/Q&A/02.some-use-questions.md)
+    - [hadoop ingestion](doc/Q&A/03.hadoop-ingestion.md)
+    - [hadoop ingestion](doc/Q&A/04.historical-疑难杂症.md)
+    - [ui 展示问题](doc/Q&A/05.ui.md)
